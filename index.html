@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+
+A.//fetch() :
+     fetch()method Returns a Promise , which Resolves into a Response Object: 
+
+B.//Promise:
+//The Promise object represents the eventual completion (or failure) of an asynchronous 
+    operation and its resulting value.
+
+C.//Promise.all() :
+   The Promise.all() method takes an iterable of promises as an input, and returns a single Promise that 
+   resolves to an array of the results of the input promises. This returned promise will resolve when all 
+   of the input's promises have resolved, or if the input iterable contains no promises. It rejects immediately 
+   upon any of the input promises rejecting or non-promises throwing an error, 
+   and will reject with this first rejection message / error.
+
+--------------------------------------------------------------------------------------------
+    //Old Method: XMLHttpRequest Object :
+    <div id="div1"></div>
+    <p id="para1"></p>
+    <script>
+        const req = new XMLHttpRequest();
+        req.addEventListener('readystatechange',()=>{
+            if(req.readyState==4 && req.status==200){
+                const rawData = req.response;
+                const data = JSON.parse(rawData);
+                console.log(data);
+                document.getElementById('div1').innerHTML = `Title: ${data.title}`;
+            }
+            else if(req.readyState==4){
+                console.log(req.statusText);
+                document.getElementById('para1').innerHTML = req.statusText;
+            }
+        })
+        req.open('GET','https://jsonplaceholder.typicode.com/todos/1');
+        req.send();
+    </script>
+
+    //Promise :
+
+    <p id="para2"></p>
+    <p id="err2" style="color:red"></p>
+    <script>
+        const para2 = document.getElementById('para2');
+        const err2 =  document.getElementById('err2');
+        const p1 = new Promise((resolve,reject)=>{
+            let request = new XMLHttpRequest();
+            request.addEventListener('readystatechange',(e)=>{
+                e.preventDefault();
+                if(request.readyState==4&&request.status==200){
+                   
+                    let rawData = request.response;
+                    let data = JSON.parse(rawData);
+                    console.log(data);
+                    resolve(data);
+                    para2.innerHTML = `Title: ${data.title}`;
+                }
+                else if(request.readyState==4){
+                    console.log(request.status);
+                    reject(request.status);
+                    err2.innerHTML = request.status;
+                }
+            })
+            request.open('get','https://jsonplaceholder.typicode.com/todos/1');
+            request.send();
+        })
+
+    </script>
